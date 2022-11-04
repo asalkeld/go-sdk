@@ -71,6 +71,8 @@ func triggerContextFromGrpcTriggerRequest(triggerReq *pb.TriggerRequest) (*trigg
 				dataRequestImpl: dataRequestImpl{
 					data:     triggerReq.GetData(),
 					mimeType: triggerReq.GetMimeType(),
+					// TODO need updated api
+					traceContext: httpTrig.HeadersOld, //nolint:staticcheck
 				},
 				method:     httpTrig.GetMethod(),
 				headers:    headers,
@@ -93,8 +95,9 @@ func triggerContextFromGrpcTriggerRequest(triggerReq *pb.TriggerRequest) (*trigg
 		trigCtx.event = &EventContext{
 			Request: &eventRequestImpl{
 				dataRequestImpl: dataRequestImpl{
-					data:     triggerReq.GetData(),
-					mimeType: triggerReq.GetMimeType(),
+					data:         triggerReq.GetData(),
+					mimeType:     triggerReq.GetMimeType(),
+					traceContext: map[string]string{}, // TODO need updated api
 				},
 				topic: topic.GetTopic(),
 			},
